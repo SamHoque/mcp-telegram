@@ -8,7 +8,7 @@ export function registerStickerTools(server: McpServer, telegram: TelegramServic
     "telegram-get-sticker-set",
     {
       description:
-        'Get all stickers from a sticker set by its short name. Returns each sticker with index, emoji and document ID. The index identifies the sticker in telegram-send-sticker. For a custom emoji set, send an emoji in a message with parseMode=html: <tg-emoji emoji-id="ID">😀</tg-emoji> (needs Telegram Premium).',
+        'Get all stickers from a sticker set by its short name. Returns each sticker with index, emoji and document ID. The index identifies the sticker in telegram-send-sticker. For a custom emoji set, send an emoji in a message with parseMode=html: <tg-emoji emoji-id="ID">E</tg-emoji>, where E is the emoji listed next to that ID; Telegram ignores the custom emoji if E differs (needs Telegram Premium).',
       inputSchema: {
         shortName: z
           .string()
@@ -37,7 +37,7 @@ export function registerStickerTools(server: McpServer, telegram: TelegramServic
         lines.push("");
         lines.push(
           set.emojis
-            ? `Send a custom emoji: telegram-send-message(chatId, text='<tg-emoji emoji-id="ID">😀</tg-emoji>', parseMode="html")`
+            ? `Send a custom emoji: telegram-send-message(chatId, text='<tg-emoji emoji-id="ID">E</tg-emoji>', parseMode="html"), where E is the emoji listed next to that ID`
             : `Send a sticker: telegram-send-sticker(chatId, stickerSet="${set.shortName}", index=N)`,
         );
         return ok(lines.join("\n"));

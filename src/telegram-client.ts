@@ -4713,7 +4713,15 @@ export class TelegramService {
       stickers: result.documents.map((doc) => ({
         id: (doc as Api.Document).id.toString(),
         accessHash: (doc as Api.Document).accessHash.toString(),
-        emoji: emojiMap.get((doc as Api.Document).id.toString()) || "",
+        // A custom emoji entity must wrap exactly the document's own alt emoji,
+        // otherwise Telegram drops it; a document can sit in several packs, so
+        // the pack map is only the fallback.
+        emoji:
+          (doc as Api.Document).attributes?.find(
+            (a): a is Api.DocumentAttributeCustomEmoji => a instanceof Api.DocumentAttributeCustomEmoji,
+          )?.alt ||
+          emojiMap.get((doc as Api.Document).id.toString()) ||
+          "",
       })),
     };
   }
